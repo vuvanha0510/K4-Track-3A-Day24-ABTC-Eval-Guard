@@ -110,7 +110,9 @@ def judge_binary(question, answer, reference, *, client=None):
     if client is None:
         from openai import OpenAI
         client = OpenAI()
-    response = client.chat.completions.create(
+    from config import call_llm
+    response = call_llm(
+        client.chat.completions.create,
         model=JUDGE_MODEL, temperature=0,
         response_format={"type": "json_object"},
         messages=[

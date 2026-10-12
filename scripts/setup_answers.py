@@ -8,7 +8,7 @@ Yêu cầu:
     1. Có 5 module m1-m5 với giao diện trong doc/PIPELINE_INTERFACE.md
        Script tự lắp module; không gọi src/pipeline.py.
     2. docker compose -f infra/docker-compose.yml up -d  (Qdrant đang chạy trên port 6333)
-    3. .env có OPENAI_API_KEY
+    3. .env có OPENAI_API_KEY hoặc GEMINI_API_KEY
 """
 from __future__ import annotations
 
@@ -83,20 +83,22 @@ def build_pipeline():
 
 
 def run_query(q: str, search, reranker, top_k: int, client=None) -> tuple[str, list[str], str, str | None]:
-    from config import OPENAI_API_KEY
+    from config import LLM_API_KEY
 
     results = search.search(q)
     docs    = [{"text": r.text, "score": r.score, "metadata": r.metadata} for r in results]
     reranked = reranker.rerank(q, docs, top_k=top_k)
     contexts = [r.text for r in reranked] if reranked else [r.text for r in results[:3]]
 
-    if (OPENAI_API_KEY or client is not None) and contexts:
+    if (LLM_API_KEY or client is not None) and contexts:
         try:
             if client is None:
                 from openai import OpenAI
                 client = OpenAI()
             ctx = "\n\n".join(contexts)
-            resp = client.chat.completions.create(
+            from config import call_llm
+            resp = call_llm(
+                client.chat.completions.create,
                 model=GENERATION_MODEL,
                 messages=[
                     {"role": "system", "content": "Trả lời CHỈ dựa trên context. Nếu không có → nói 'Không tìm thấy.'"},
@@ -138,9 +140,9 @@ def main(argv=None):
 
     print(f"\nRunning {len(test_set)} queries...")
     answers = []
-    from config import OPENAI_API_KEY
+    from config import LLM_API_KEY
     client = None
-    if OPENAI_API_KEY:
+    if LLM_API_KEY:
         from openai import OpenAI
         client = OpenAI()
     t_start = time.time()
