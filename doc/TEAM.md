@@ -8,7 +8,7 @@ Trưởng nhóm/người nộp: Vũ Văn Hà - 2A202602589
 
 Ngày lab/deadline áp dụng: 2026-10-12, Asia/Ho_Chi_Minh (UTC+07:00)
 
-Commit dùng để chấm: `0223e2d` (docs: add live Phase A/B/C artifacts and measured reports), ngay sau commit `f13137e` (feat: run all phases live on Gemini instead of OpenAI) chứa toàn bộ thay đổi source. Link repo nộp bài: chưa push, sẽ cập nhật sau khi push.
+Commit dùng để chấm: `0223e2d` (docs: add live Phase A/B/C artifacts and measured reports), ngay sau commit `f13137e` (feat: run all phases live on Gemini instead of OpenAI) chứa toàn bộ thay đổi source. Link repo nộp bài: [Link.](https://github.com/vuvanha0510/K4-Track-3A-Day24-ABTC-Eval-Guard.git)
 
 ## Thành viên và phân công
 
